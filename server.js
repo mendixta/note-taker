@@ -20,20 +20,25 @@ app.get("/notes", function(req,res) {
 });
 
 // ================== GET REQUEST  =======================
+
 currentID = db.length;
 app.get("/api/notes", function (req,res){
     return res.json(db)
 })
 
+// ================== POST REQUEST  =======================
 app.post ("/api/notes", function (req,res) {
     const newNote = req.body;
     newNote["id"] = currentID +1;
     db.push(newNote);
 
     const createNote = JSON.stringify(db);
-    fs.writeFile(path.join(__dirname, "/db/db.json"), createNote);
-        res.json(newNote);
-        
+    fs.writeFile(path.join(__dirname, "/db/db.json"), createNote , (err) => {
+        if (err) {
+            console.log("There was an error!") 
+        }
+    });
+        res.json(newNote);    
 })
  
 // ================= LISTENING ON PORT ========================
